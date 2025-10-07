@@ -1,289 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="UTF-8">
 <title>Crypto Mining</title>
-<link rel="icon" href="favicon.ico" type="image/x-icon">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
-  body{background:#f5f5f5;color:#111}
-  header{background:#0a0a0a;color:#fff;padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
-  .brand{display:flex;align-items:center;gap:12px}
-  header img{height:40px}
-  nav a{color:#fff;margin-left:14px;text-decoration:none;font-weight:700;cursor:pointer}
-  nav a:hover{color:#ff9900}
-  .coins{background:#222;color:#fff;padding:10px 14px;overflow-x:auto;white-space:nowrap}
-  .coins span{display:inline-block;margin-right:14px;padding:6px 10px;background:#333;border-radius:6px;font-size:14px}
-  main{max-width:1200px;margin:16px auto;padding:0 16px}
-  section{background:#fff;padding:18px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.08);margin-bottom:14px}
-  h2{font-size:18px;margin-bottom:10px;color:#0a0a0a}
-  p{margin-bottom:8px}
-  .scrolling-table{overflow:hidden;height:220px}
-  table{width:100%;border-collapse:collapse}
-  thead tr{background:#fafafa;position:sticky;top:0}
-  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #eee;font-size:14px}
-  .avatar{width:30px;height:30px;border-radius:50%;vertical-align:middle;margin-right:8px}
-  .btn{display:inline-block;padding:10px 18px;background:#ff9900;color:#fff;border-radius:6px;border:0;cursor:pointer}
-  .btn.secondary{background:#0a0a0a}
-  footer{background:#0a0a0a;color:#fff;padding:14px;text-align:center;margin-top:12px;border-top-left-radius:6px;border-top-right-radius:6px}
-  .user-info{display:flex;gap:10px;align-items:center}
-  /* Modal */
-  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:40}
-  .modal{background:#fff;padding:18px;border-radius:8px;min-width:300px;box-shadow:0 6px 20px rgba(0,0,0,0.2)}
-  .modal h3{margin-bottom:10px}
-  .input{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ddd;border-radius:6px}
-  .txt-muted{color:#666;font-size:13px}
-  @media(max-width:720px){.coins span{padding:6px 8px;font-size:13px}}
+body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f2f2f2; }
+header { background:#1e1e1e; color:white; padding:10px 20px; }
+header h1 { margin:0; display:inline-block; }
+main { padding:20px; }
+table { width:100%; border-collapse: collapse; margin-top:15px; }
+th, td { border:1px solid #ccc; padding:8px; text-align:left; }
+th { background:#eee; }
+button { padding:6px 12px; margin:5px 0; cursor:pointer; }
+#loginModal { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); display:flex; justify-content:center; align-items:center; }
+#loginModal div { background:white; padding:20px; border-radius:5px; width:300px; }
+#dashboard h3 { margin-top:30px; }
+input[type=number] { width:100px; padding:4px; }
+.progress-bar { height:12px; background:#eee; border-radius:6px; overflow:hidden; width:100%; margin-top:5px; }
+.progress-bar-inner { height:12px; background:#4caf50; width:0%; transition: width 0.5s; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="brand">
-    <img src="logo.png" alt="Crypto Mining Logo">
-    <strong style="font-size:20px">Crypto Mining</strong>
-  </div>
-
-  <div style="display:flex;align-items:center;gap:12px">
-    <nav>
-      <a id="nav-home">Home</a><a id="nav-faq">FAQ</a><a id="nav-contact">Contact</a>
-    </nav>
-
-    <div class="user-info" id="user-area">
-      <!-- Will be replaced by login button or user info -->
-      <button class="btn secondary" id="login-btn">Login</button>
-    </div>
-  </div>
+  <h1>Crypto Mining</h1>
 </header>
 
-<div class="coins" aria-hidden="true">
-  <span>Bitcoin</span><span>Ethereum</span><span>Litecoin</span><span>Solana</span>
-  <span>Dogecoin</span><span>BNB</span><span>TRON</span><span>TON</span>
-  <span>Bitcoin Cash</span><span>Monero</span><span>Polygon</span><span>USDT</span>
-  <span>USDC</span><span>DAI</span><span>SHIB</span><span>NOT</span><span>DOGS</span>
-</div>
-
 <main>
-  <section>
-    <h2>Hashrate Faucet</h2>
-    <p>Crypto Mining operates Aleo mining operations to provide consistent returns of <strong>0.25–0.45%</strong> daily. We accept deposits in multiple cryptocurrencies.</p>
-  </section>
-
-  <section style="display:flex;gap:12px;flex-wrap:wrap">
-    <div style="flex:1;min-width:160px;background:#fff;padding:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
-      <h2>Daily Returns</h2><p><strong>0.25–0.45%</strong></p>
-    </div>
-    <div style="flex:1;min-width:160px;background:#fff;padding:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
-      <h2>Supported Coins</h2><p><strong>15+</strong></p>
-    </div>
-    <div style="flex:1;min-width:160px;background:#fff;padding:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
-      <h2>Reviews</h2><p>Trustpilot ↗</p>
-    </div>
-  </section>
-
-  <section>
-    <h2>Latest Transactions</h2>
-    <div class="scrolling-table" id="tx-scroll">
-      <table id="transactions">
-        <thead>
-          <tr><th>User</th><th>Type</th><th>Amount</th><th>TX ID</th><th>Time</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
-
-  <section>
-    <h2>Free Faucet</h2>
-    <p>Claim free hashrate every day from our faucet. Start earning immediately without any investment.</p>
-    <div class="scrolling-table" id="faucet-scroll">
-      <table id="faucet">
-        <thead><tr><th>User</th><th>Reward</th><th>Time</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <div style="margin-top:10px">
-      <button class="btn" id="claim-btn">Claim 1 H/s (demo)</button>
-    </div>
-  </section>
-
-  <section>
-    <h2>Affiliate Program</h2>
-    <p>Earn additional income by referring friends. Get 2% from their deposits credited to your balance and 2 H/s each new friend to your hashrate.</p>
-  </section>
-</main>
-
-<footer>
-  Crypto Mining © 2025. Hashrate Faucet Platform. &nbsp; <a href="#" style="color:#ff9900;text-decoration:none">Telegram Channel</a>
-</footer>
-
-<!-- Login Modal -->
-<div class="modal-backdrop" id="modal">
-  <div class="modal" role="dialog" aria-modal="true">
-    <h3>Login (demo)</h3>
-    <input id="email-input" class="input" placeholder="Enter email or username" />
-    <div class="txt-muted">This is a demo login stored locally in your browser only (no server).</div>
-    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
-      <button class="btn secondary" id="modal-close">Cancel</button>
-      <button class="btn" id="modal-login">Login</button>
+  <!-- Login Modal -->
+  <div id="loginModal">
+    <div>
+      <h2>Login</h2>
+      <input type="text" id="emailInput" placeholder="Enter email or username" style="width:100%; padding:6px;">
+      <button id="modalLogin" style="width:100%; margin-top:10px;">Login</button>
     </div>
   </div>
-</div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" style="display:none;">
+    <h2>🔥 Dashboard</h2>
+    <p>Hi, <span id="user-email"></span> <button id="logoutBtn">Logout</button></p>
+
+    <div>
+      <p>Your Hashrate: <span id="userHashrate">0.00</span> H/s</p>
+      <p>Your Balance: <span id="userBalance">0.00</span> USD</p>
+      <p>Current Rate: <span id="currentRate">0.35%</span></p>
+      <p>Boost Mining: <input type="number" id="usdtInput" value="0"> USDT <button id="buyBoost">Buy</button></p>
+    </div>
+
+    <h3>Select a coin to mine:</h3>
+    <table id="coinTable">
+      <thead>
+        <tr>
+          <th>Coin</th>
+          <th>Symbol</th>
+          <th>Balance</th>
+          <th>Pool Hashrate</th>
+          <th>Your Hashrate</th>
+          <th>Progress</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</main>
 
 <script>
-/* ---------- Helpers ---------- */
-function qs(sel){return document.querySelector(sel)}
-function qsa(sel){return Array.from(document.querySelectorAll(sel))}
-function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
-function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
-const txChars = 'abcdef0123456789'
-const names = ['vuac','cohe','wil','herb','meoi','jose','resh','sath','ytpa','kito','7sun','shoa','mo24','azri','spam','osve','kbhn']
-const domains = ['@gmail.com','@yahoo.com','@outlook.com','@hotmail.com']
-const coinPool = ['DOGE','POL','BTC','ETH','LTC','SOL','BNB','TRX','TON','BCH','XMR','MATIC','USDT','USDC','DAI','SHIB']
+const coins = [
+  {name:"Bitcoin", symbol:"BTC"},
+  {name:"Ethereum", symbol:"ETH"},
+  {name:"BNB", symbol:"BNB"},
+  {name:"Dogecoin", symbol:"DOGE"},
+  {name:"Litecoin", symbol:"LTC"},
+  {name:"Polygon", symbol:"POL"},
+  {name:"USDT", symbol:"USDT"},
+  {name:"USDC", symbol:"USDC"},
+  {name:"Shiba Inu", symbol:"SHIB"},
+  {name:"TON", symbol:"TON"},
+  {name:"Tron", symbol:"TRX"},
+  {name:"Monero", symbol:"XMR"},
+  {name:"DAI", symbol:"DAI"},
+  {name:"Dogs", symbol:"DOGS"},
+  {name:"NotCoin", symbol:"NOT"},
+  {name:"Solana", symbol:"SOL"}
+];
 
-function maskEmail(name){
-  return name+'***'+pick(domains)
-}
-function genTxId(len=8){ let s=''; for(let i=0;i<len;i++) s+=txChars.charAt(Math.floor(Math.random()*txChars.length)); return s }
-function formatAmount(coin){
-  if(coin==='SHIB' || coin==='DOGE') return (Math.random()*1000).toFixed(6)+' '+coin
-  if(coin==='BTC' || coin==='ETH' || coin==='BNB' || coin==='TON') return (Math.random()*0.5).toFixed(6)+' '+coin
-  return (Math.random()*5).toFixed(6)+' '+coin
-}
-function timeLabel(){ return 'Just now' }
+let user = null;
+let userHashrate = 5.0;
+let userBalance = 0;
 
-/* ---------- Avatar generator (data URI) ---------- */
-function avatarFor(name){
-  const colors = ['#FFB54D','#6EC1E4','#A0D468','#E26A6A','#9B59B6','#4BC0C0','#F39C12','#3498DB']
-  let sum=0; for(let i=0;i<name.length;i++) sum+=name.charCodeAt(i)
-  const color = colors[sum % colors.length]
-  const initial = name.charAt(0).toUpperCase()
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><rect width='100%' height='100%' fill='${color}' rx='32' ry='32'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='30' fill='#fff'>${initial}</text></svg>`
-  return 'data:image/svg+xml;utf8,'+encodeURIComponent(svg)
-}
+// Hàm lưu user
+function setCurrentUser(u) { user = u; }
 
-/* ---------- DOM refs ---------- */
-const txBody = qs('#transactions tbody')
-const faucetBody = qs('#faucet tbody')
-const txScroll = qs('#tx-scroll')
-const faucetScroll = qs('#faucet-scroll')
-const modal = qs('#modal')
-const emailInput = qs('#email-input')
-const loginBtn = qs('#login-btn')
-const modalLogin = qs('#modal-login')
-const modalClose = qs('#modal-close')
-const claimBtn = qs('#claim-btn')
-const userArea = qs('#user-area')
+// Logout
+document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  user = null;
+  userHashrate = 5.0;
+  userBalance = 0;
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('loginModal').style.display = 'flex';
+});
 
-/* ---------- Local storage user ---------- */
-const STORAGE_KEY = 'cm_demo_user'
-function getCurrentUser(){ return JSON.parse(localStorage.getItem(STORAGE_KEY)) }
-function setCurrentUser(u){ localStorage.setItem(STORAGE_KEY, JSON.stringify(u)) }
-function clearCurrentUser(){ localStorage.removeItem(STORAGE_KEY) }
-
-function renderUserArea(){
-  const u = getCurrentUser()
-  if(u){
-    userArea.innerHTML = `<div style="display:flex;align-items:center;gap:8px"><img src="${avatarFor(u.name)}" class="avatar" alt=""><div style="font-weight:700">${u.display}</div><button class="btn secondary" id="logout-btn">Logout</button></div>`
-    qs('#logout-btn').addEventListener('click', ()=>{
-      clearCurrentUser(); renderUserArea()
-    })
-  } else {
-    userArea.innerHTML = `<button class="btn secondary" id="login-btn">Login</button>`
-    qs('#login-btn').addEventListener('click', ()=>openModal())
-  }
+// Render bảng coin
+function renderCoinTable(){
+  const tbody = document.querySelector('#coinTable tbody');
+  tbody.innerHTML = '';
+  coins.forEach(c=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${c.name}</td>
+      <td>${c.symbol}</td>
+      <td id="${c.symbol}-bal">0.00000000</td>
+      <td>${Math.floor(Math.random()*1000)} kH/s</td>
+      <td id="${c.symbol}-hash">0 H/s</td>
+      <td>
+        <div class="progress-bar"><div id="${c.symbol}-progress" class="progress-bar-inner"></div></div>
+      </td>
+      <td><button class="mineBtn">Mine</button></td>
+    `;
+    tr.querySelector('.mineBtn').addEventListener('click',()=>{
+      mineCoin(c.symbol);
+    });
+    tbody.appendChild(tr);
+  });
 }
 
-/* ---------- Modal control ---------- */
-function openModal(){
-  emailInput.value = ''
-  modal.style.display = 'flex'
-  setTimeout(()=>emailInput.focus(),50)
-}
-function closeModal(){ modal.style.display = 'none' }
-modalClose.addEventListener('click', closeModal)
-modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal() })
+// Mining function
+function mineCoin(symbol){
+  const hashIncrease = userHashrate / 1000;
+  const balCell = document.getElementById(symbol+'-bal');
+  const hashCell = document.getElementById(symbol+'-hash');
+  const progBar = document.getElementById(symbol+'-progress');
 
-/* ---------- Create rows ---------- */
-function createTxRow({user,type,amount,tx,time}){
-  const tr = document.createElement('tr')
-  const userCell = `<td><img class="avatar" src="${avatarFor(user)}" alt="">${maskEmail(user)}</td>`
-  tr.innerHTML = userCell + `<td>${type}</td><td>${amount}</td><td>${tx}</td><td>${time}</td>`
-  return tr
-}
-function createFaucetRow({user,reward,time}){
-  const tr = document.createElement('tr')
-  tr.innerHTML = `<td><img class="avatar" src="${avatarFor(user)}" alt="">${maskEmail(user)}</td><td>${reward}</td><td>${time}</td>`
-  return tr
-}
+  let bal = parseFloat(balCell.textContent);
+  bal += hashIncrease;
+  balCell.textContent = bal.toFixed(8);
+  hashCell.textContent = hashIncrease.toFixed(2) + ' H/s';
 
-/* ---------- Push functions ---------- */
-const MAX_TX = 80, MAX_FAUCET = 50
-function pushTx(userOverride=null){
-  const user = userOverride || pick(names)
-  const coin = pick(coinPool)
-  const row = { user, type:'WITHDRAW', amount: formatAmount(coin), tx: genTxId(8)+'...'+genTxId(4), time: timeLabel() }
-  const tr = createTxRow(row)
-  txBody.insertBefore(tr, txBody.firstChild)
-  while(txBody.children.length > MAX_TX) txBody.removeChild(txBody.lastChild)
-  tr.style.background = '#eaf7ff'
-  setTimeout(()=>tr.style.transition='background 700ms',10)
-  setTimeout(()=>tr.style.background='',800)
+  // Tăng progress (giới hạn 100%)
+  let progress = parseFloat(progBar.style.width) || 0;
+  progress += hashIncrease; // tăng theo H/s
+  if(progress>100) progress=100;
+  progBar.style.width = progress+'%';
+
+  userBalance += hashIncrease * 0.001; // demo USD
+  document.getElementById('userBalance').textContent = userBalance.toFixed(2);
 }
 
-function pushFaucet(userOverride=null, rewardOverride=null){
-  const user = userOverride || pick(names)
-  const reward = rewardOverride || (rand(1,5) + '.0 H/s')
-  const row = { user, reward, time: timeLabel() }
-  const tr = createFaucetRow(row)
-  faucetBody.insertBefore(tr, faucetBody.firstChild)
-  while(faucetBody.children.length > MAX_FAUCET) faucetBody.removeChild(faucetBody.lastChild)
-  tr.style.background = '#fff7e6'
-  setTimeout(()=>tr.style.transition='background 700ms',10)
-  setTimeout(()=>tr.style.background='',800)
-}
+// Buy Boost
+document.getElementById('buyBoost').addEventListener('click',()=>{
+  const usdt = parseFloat(document.getElementById('usdtInput').value);
+  if(isNaN(usdt) || usdt<=0){ alert('Enter valid USDT'); return; }
+  userHashrate += usdt * 10; // 1 USDT = 10 H/s bonus
+  alert('Hashrate boosted by '+(usdt*10)+' H/s!');
+  document.getElementById('userHashrate').textContent = userHashrate.toFixed(2);
+});
 
-/* ---------- Simulation (live) ---------- */
-function startSimulation(){
-  // seed initial rows
-  for(let i=0;i<6;i++){ pushTx(); pushFaucet() }
-  // new tx every 2-5s
-  setInterval(()=>{ pushTx() }, rand(2000,5000))
-  // new faucet claim every 3-8s
-  setInterval(()=>{ if(Math.random()>0.4) pushFaucet() }, rand(3000,8000))
-  // small auto-scroll for visual
-  setInterval(()=>{
-    txScroll.scrollTop = (txScroll.scrollTop + 1) % Math.max(1, txBody.scrollHeight - txScroll.clientHeight)
-    faucetScroll.scrollTop = (faucetScroll.scrollTop + 1) % Math.max(1, faucetBody.scrollHeight - faucetScroll.clientHeight)
-  }, 80)
-}
-
-/* ---------- Hook up claim button ---------- */
-claimBtn.addEventListener('click', ()=>{
-  const u = getCurrentUser()
-  if(!u){ openModal(); return }
-  pushFaucet(u.name, '1.0 H/s')
-  // visual feedback
-  claimBtn.textContent = 'Claimed ✓'
-  setTimeout(()=>claimBtn.textContent = 'Claim 1 H/s (demo)', 1200)
-})
-
-/* ---------- Modal login action ---------- */
-modalLogin.addEventListener('click', ()=>{
-  const val = emailInput.value.trim()
-  if(!val){ alert('Please enter email or username'); emailInput.focus(); return }
-  // store minimal demo user
-  const display = (val.includes('@')) ? (val.split('@')[0] + '***@' + val.split('@')[1]) : val
-  const userObj = { name: val.replace(/[^a-z0-9]/gi,'').toLowerCase() || 'user', display }
-  setCurrentUser(userObj)
-  renderUserArea()
-  closeModal()
-})
-
-/* ---------- Init ---------- */
-renderUserArea()
-startSimulation()
+// Login action
+document.getElementById('modalLogin').addEventListener('click', ()=>{
+  const val = document.getElementById('emailInput').value.trim();
+  if(!val){ alert('Please enter email or username'); return; }
+  setCurrentUser({name: val, display: val});
+  document.getElementById('user-email').textContent = val;
+  document.getElementById('loginModal').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('userHashrate').textContent = userHashrate.toFixed(2);
+  renderCoinTable();
+});
 </script>
 
 </body>
