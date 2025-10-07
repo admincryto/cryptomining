@@ -1,153 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crypto Mining</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>HashUp — Demo Mining Dashboard</title>
+<meta name="description" content="Demo giao diện mining & faucet — không phải trang thật" />
 <style>
-    body { margin:0; font-family: Arial, sans-serif; background:#f4f4f4; }
-    header { background:#1a1a1a; color:#fff; padding:10px 20px; display:flex; justify-content:space-between; align-items:center; }
-    header .logo { font-weight:bold; font-size:20px; }
-    header nav a { color:#fff; margin-left:15px; text-decoration:none; }
-    header .user { font-size:14px; }
-    .coins { background:#333; color:#fff; padding:10px; overflow-x:auto; white-space:nowrap; }
-    .coins span { margin-right:15px; cursor:pointer; }
-    .container { padding:20px; max-width:1200px; margin:auto; }
-    h2 { margin-top:0; }
-    .card { background:#fff; padding:15px; margin-bottom:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
-    table { width:100%; border-collapse:collapse; }
-    table th, table td { padding:8px; border:1px solid #ddd; text-align:left; font-size:14px; }
-    .tabs { display:flex; margin-bottom:10px; cursor:pointer; }
-    .tabs div { padding:10px 20px; background:#ddd; margin-right:5px; border-radius:5px 5px 0 0; }
-    .tabs .active { background:#fff; font-weight:bold; }
-    .tab-content { background:#fff; padding:15px; border-radius:0 5px 5px 5px; box-shadow:0 0 10px rgba(0,0,0,0.05); }
-    button { padding:5px 10px; cursor:pointer; border:none; border-radius:4px; background:#1a73e8; color:#fff; }
-    footer { background:#1a1a1a; color:#fff; text-align:center; padding:15px; margin-top:20px; font-size:14px; }
-</style>
-</head>
-<body>
+  :root{
+    --bg:#0b1020;
+    --card:#0f1724;
+    --accent:#6ee7b7;
+    --muted:#9aa4b2;
+    --glass: rgba(255,255,255,0.03);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg,#071026 0%, #071226 60%), var(--bg);
+    color:#e6eef6;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.35;
+  }
 
-<header>
-    <div class="logo">Crypto Mining Logo</div>
-    <nav>
-        <a href="#">Home</a>
-        <a href="#">FAQ</a>
-        <a href="#">Contact</a>
-    </nav>
-    <div class="user">ant71559***@gmail.com | <a href="#" style="color:#fff;">Logout</a></div>
-</header>
+  /* Header / Nav */
+  .header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    padding:18px 28px;
+    border-bottom:1px solid rgba(255,255,255,0.03);
+    position:sticky;
+    top:0;
+    backdrop-filter: blur(6px);
+    background: linear-gradient(180deg, rgba(11,16,32,0.6), rgba(11,16,32,0.35));
+    z-index:10;
+  }
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{
+    width:44px;height:44px;border-radius:8px;
+    background:linear-gradient(135deg,#14b8a6,#0ea5e9);
+    display:flex;align-items:center;justify-content:center;font-weight:700;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);font-size:18px;
+  }
+  .brand h1{margin:0;font-size:18px;letter-spacing:0.3px}
+  nav{display:flex;gap:12px;align-items:center}
+  nav a{color:var(--muted);text-decoration:none;padding:10px 12px;border-radius:8px;font-size:14px}
+  nav a:hover{color:#fff;background:rgba(255,255,255,0.03)}
 
-<div class="coins">
-    Bitcoin Ethereum Litecoin Solana Dogecoin BNB TRONTON Bitcoin Cash Monero Polygon USDT USDC DAI SHIB NOTDOGS
-</div>
+  /* layout */
+  .container{max-width:1200px;margin:26px auto;padding:0 18px;display:grid;grid-template-columns:1fr 380px;gap:20px}
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);
+    border-radius:12px;padding:18px;
+    box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+  }
 
-<div class="container">
-
-    <!-- Hashrate Faucet -->
-    <div class="card">
-        <h2>Hashrate Faucet</h2>
-        <p>Crypto Mining operates Aleo mining operations to provide consistent returns of <strong>0.25–0.45% daily</strong>. We accept deposits in multiple cryptocurrencies.</p>
-        <p><strong>Daily Returns:</strong> 0.25–0.45%</p>
-        <p><strong>Supported Coins:</strong> 15+</p>
-        <p><strong>Reviews:</strong> <a href="#" target="_blank">Trustpilot ↗</a></p>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs">
-        <div class="active" data-tab="transactions">Latest Transactions</div>
-        <div data-tab="faucet">Free Faucet</div>
-        <div data-tab="wallet">Nạp ví</div>
-        <div data-tab="buy-usdt">Mua USDT</div>
-    </div>
-
-    <!-- Tab Contents -->
-    <div class="tab-content" id="transactions">
-        <table>
-            <thead>
-                <tr><th>User</th><th>Type</th><th>Amount</th><th>TX ID</th><th>Time</th></tr>
-            </thead>
-            <tbody id="tx-table">
-                <tr><td>resh***@gmail.com</td><td>WITHDRAW</td><td>0.306468 TON</td><td>3a4d47b2...f143</td><td>Just now</td></tr>
-                <tr><td>cohe***@hotmail.com</td><td>WITHDRAW</td><td>0.395691 BNB</td><td>5c9cd27c...79d0</td><td>Just now</td></tr>
-                <tr><td>jose***@hotmail.com</td><td>WITHDRAW</td><td>0.496788 BCH</td><td>5e6ff616...49c2</td><td>Just now</td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="tab-content" id="faucet" style="display:none;">
-        <p>Claim free hashrate every day from our faucet. Start earning immediately without any investment.</p>
-        <table>
-            <thead><tr><th>User</th><th>Reward</th><th>Time</th></tr></thead>
-            <tbody>
-                <tr><td>kito***@outlook.com</td><td>5.0 H/s</td><td>Just now</td></tr>
-                <tr><td>azri***@yahoo.com</td><td>1.0 H/s</td><td>Just now</td></tr>
-                <tr><td>sath***@hotmail.com</td><td>3.0 H/s</td><td>Just now</td></tr>
-            </tbody>
-        </table>
-        <button onclick="alert('Bạn đã claim 1 H/s')">Claim 1 H/s</button>
-    </div>
-
-    <div class="tab-content" id="wallet" style="display:none;">
-        <h3>Nạp ví</h3>
-        <p>Nhập địa chỉ ví và số lượng coin bạn muốn nạp:</p>
-        <input type="text" id="wallet-address" placeholder="Nhập địa chỉ ví" style="width:60%; padding:5px;">
-        <input type="number" id="wallet-amount" placeholder="Số lượng" style="padding:5px; width:20%;">
-        <button onclick="depositCoin()">Nạp Coin</button>
-    </div>
-
-    <div class="tab-content" id="buy-usdt" style="display:none;">
-        <h3>Mua USDT</h3>
-        <p>Nhập số lượng USDT muốn mua:</p>
-        <input type="number" id="buy-usdt-amount" placeholder="Số lượng USDT" style="padding:5px; width:30%;">
-        <button onclick="buyUSDT()">Mua USDT</button>
-    </div>
-
-    <!-- Affiliate Program -->
-    <div class="card">
-        <h2>Affiliate Program</h2>
-        <p>Earn additional income by referring friends. Get 2% from their deposits credited to your balance and 2 H/s each new friend to your hashrate.</p>
-    </div>
-
-</div>
-
-<footer>
-    Crypto Mining © 2025. Hashrate Faucet Platform. &nbsp; Telegram Channel
-</footer>
-
-<script>
-    // Tab switching
-    const tabs = document.querySelectorAll('.tabs div');
-    const contents = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            contents.forEach(c => c.style.display='none');
-            document.getElementById(tab.dataset.tab).style.display='block';
-        });
-    });
-
-    // Deposit coin demo
-    function depositCoin() {
-        const addr = document.getElementById('wallet-address').value;
-        const amount = document.getElementById('wallet-amount').value;
-        if(addr && amount) {
-            alert(`Bạn đã nạp ${amount} coin vào ví ${addr}`);
-        } else {
-            alert('Vui lòng nhập đầy đủ thông tin.');
-        }
-    }
-
-    // Buy USDT demo
-    function buyUSDT() {
-        const amount = document.getElementById('buy-usdt-amount').value;
-        if(amount) {
-            alert(`Bạn đã mua ${amount} USDT thành công!`);
-        } else {
-            alert('Vui lòng nhập số lượng USDT.');
-        }
-    }
-</script>
-
-</body>
-</html>
+  /* left column elements */
+  .hero{display:flex;gap:18px;align-items:center}
+  .hero .left{
+    flex:1;
+  }
+  .hero h2{margin:0;font-size:20px}
+  .stats{display:flex;gap:12px;margin-top:12px}
+  .stat{background:var(--glass);padding:10px;border-radius:10px;min-width:120px}
+  .stat .value{font-weight:700;font-size:18px}
+  .coins{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .coin{
+    background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+    border-radius:10px;padding:10px 12px;display:flex;gap:10px;align-items:center;border:1px solid rgba(255,255,255,0.02);
+    cursor:pointer;
+  }
+  .coin svg{width:28px;height:28px;border-radius:6px;b
