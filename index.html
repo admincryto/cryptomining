@@ -1,174 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Crypto Mining</title>
-<style>
-body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f2f2f2; }
-header { background:#1e1e1e; color:white; padding:10px 20px; }
-header h1 { margin:0; display:inline-block; }
-main { padding:20px; }
-table { width:100%; border-collapse: collapse; margin-top:15px; }
-th, td { border:1px solid #ccc; padding:8px; text-align:left; }
-th { background:#eee; }
-button { padding:6px 12px; margin:5px 0; cursor:pointer; }
-#loginModal { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); display:flex; justify-content:center; align-items:center; }
-#loginModal div { background:white; padding:20px; border-radius:5px; width:300px; }
-#dashboard h3 { margin-top:30px; }
-input[type=number] { width:100px; padding:4px; }
-.progress-bar { height:12px; background:#eee; border-radius:6px; overflow:hidden; width:100%; margin-top:5px; }
-.progress-bar-inner { height:12px; background:#4caf50; width:0%; transition: width 0.5s; }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Crypto Mining - Live</title>
+  <link rel="icon" href="favicon.ico" />
+  <style>
+    *{box-sizing:border-box} body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f5f7fb;color:#111}
+    header{background:#0b1220;color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
+    header .brand{display:flex;gap:12px;align-items:center}
+    header img{height:40px}
+    header .right{display:flex;gap:10px;align-items:center}
+    main{max-width:1100px;margin:18px auto;padding:0 16px}
+    .card{background:#fff;border-radius:10px;padding:16px;margin-bottom:14px;box-shadow:0 6px 20px rgba(10,12,20,0.06)}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .col{flex:1;min-width:180px}
+    h2{margin:0 0 8px 0;font-size:18px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;font-size:14px}
+    th{background:#fafafa}
+    .btn{background:#ff8a00;color:#fff;border:0;padding:8px 12px;border-radius:8px;cursor:pointer}
+    .btn.secondary{background:#111;color:#fff}
+    .small{font-size:13px;color:#666}
+    .progress{height:10px;background:#eee;border-radius:6px;overflow:hidden;width:160px}
+    .progress > i{display:block;height:100%;background:#2ecc71;width:0%}
+    input[type="number"], input[type="text"]{padding:8px;border:1px solid #ddd;border-radius:6px}
+    .txbox{font-size:13px;color:#333;background:#f8fafb;padding:8px;border-radius:6px;margin-top:8px}
+    footer{padding:10px;text-align:center;color:#666;font-size:13px;margin-top:16px}
+    @media(max-width:760px){ .row{flex-direction:column} .progress{width:100%} }
+  </style>
+  <!-- ethers.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.9.0/dist/ethers.min.js"></script>
 </head>
 <body>
 
 <header>
-  <h1>Crypto Mining</h1>
+  <div class="brand">
+    <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
+    <div>
+      <strong>Crypto Mining</strong><div class="small">Hashrate Faucet Platform</div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div id="networkLabel" class="small">Network: <span id="netName">—</span></div>
+    <div id="userArea">
+      <button id="openLogin" class="btn secondary">Login</button>
+    </div>
+  </div>
 </header>
 
 <main>
-  <!-- Login Modal -->
-  <div id="loginModal">
-    <div>
-      <h2>Login</h2>
-      <input type="text" id="emailInput" placeholder="Enter email or username" style="width:100%; padding:6px;">
-      <button id="modalLogin" style="width:100%; margin-top:10px;">Login</button>
+  <!-- DASHBOARD -->
+  <div id="dashboard" style="display:none">
+    <div class="card row">
+      <div class="col">
+        <h2>🔥 Dashboard</h2>
+        <div class="small">Hi, <span id="userEmail">-</span></div>
+      </div>
+      <div class="col">
+        <div class="small">Your Hashrate</div>
+        <div style="font-weight:700;font-size:20px" id="userHashrate">5.00 H/s</div>
+      </div>
+      <div class="col">
+        <div class="small">Your Balance</div>
+        <div style="font-weight:700;font-size:20px" id="userBalance">0.00 USD</div>
+      </div>
+      <div class="col">
+        <div class="small">Current Rate</div>
+        <div style="font-weight:700;font-size:20px" id="currentRate">0.35 %</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <div>
+          <strong>Boost mining (buy USDT)</strong><div class="small">Send USDT from your wallet to increase your H/s</div>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+          <input id="buyAmount" type="number" min="1" value="5" style="width:120px">
+          <button id="connectWallet" class="btn">Connect Wallet</button>
+          <button id="buyBtn" class="btn">Buy Boost</button>
+        </div>
+      </div>
+      <div id="txStatus" class="txbox" style="display:none"></div>
+    </div>
+
+    <div class="card">
+      <h2>Select coin to mine</h2>
+      <div class="small">Click <strong>Mine</strong> to add hashrate contribution and accumulate balance for that coin.</div>
+      <table id="coinTable">
+        <thead>
+          <tr><th>Coin</th><th>Symbol</th><th>Balance</th><th>Pool Hashrate</th><th>Your Hashrate</th><th>Progress</th><th>Action</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Latest Transactions (simulated)</h2>
+      <div id="latestTx" class="small">Live simulated withdrawals & claims appear here.</div>
+      <div style="height:220px;overflow:auto;margin-top:8px;border-radius:8px;background:#fafafa;padding:8px" id="txList"></div>
     </div>
   </div>
 
-  <!-- Dashboard -->
-  <div id="dashboard" style="display:none;">
-    <h2>🔥 Dashboard</h2>
-    <p>Hi, <span id="user-email"></span> <button id="logoutBtn">Logout</button></p>
-
-    <div>
-      <p>Your Hashrate: <span id="userHashrate">0.00</span> H/s</p>
-      <p>Your Balance: <span id="userBalance">0.00</span> USD</p>
-      <p>Current Rate: <span id="currentRate">0.35%</span></p>
-      <p>Boost Mining: <input type="number" id="usdtInput" value="0"> USDT <button id="buyBoost">Buy</button></p>
+  <!-- LOGIN MODAL (simple) -->
+  <div id="loginModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;display:flex;z-index:30">
+    <div style="background:#fff;padding:16px;border-radius:8px;min-width:320px">
+      <h3>Login / Register</h3>
+      <div class="small">Enter email to register/login (demo)</div>
+      <input id="emailInput" type="text" placeholder="email@example.com" style="width:100%;margin-top:8px">
+      <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
+        <button id="closeLogin" class="btn secondary">Cancel</button>
+        <button id="doLogin" class="btn">Login</button>
+      </div>
     </div>
-
-    <h3>Select a coin to mine:</h3>
-    <table id="coinTable">
-      <thead>
-        <tr>
-          <th>Coin</th>
-          <th>Symbol</th>
-          <th>Balance</th>
-          <th>Pool Hashrate</th>
-          <th>Your Hashrate</th>
-          <th>Progress</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
   </div>
+
 </main>
 
+<footer>
+  © 2025 Crypto Mining — Demo platform. Replace receiver address & network in config before production.
+</footer>
+
 <script>
+/* ================== CONFIG — EDIT BEFORE DEPLOY ==================
+ - RECEIVER_ADDRESS: your wallet address to receive USDT
+ - CHAIN: choose chain 'bsc' | 'eth' | 'polygon' (must match user's wallet network)
+ - USDT_CONTRACTS: token contract address on chosen chain
+ - BOOST_RATE: how many H/s per 1 USDT (example uses 10 H/s per USDT)
+=================================================================*/
+
+const CONFIG = {
+  RECEIVER_ADDRESS: '0xeC50a1f60571B10AD6840e0841d439a4F5cDD80c', // <- your provided BSC address
+  CHAIN: 'bsc', // 'bsc' | 'eth' | 'polygon'
+  USDT_CONTRACTS: {
+    bsc: '0x55d398326f99059fF775485246999027B3197955',    // USDT (BEP20) on BSC
+    eth: '0xdAC17F958D2ee523a2206206994597C13D831ec7',     // USDT on Ethereum
+    polygon: '0x3813e82e6f7098b9583FC0F33a962D02018B6803'   // (example) change if needed
+  },
+  BOOST_RATE: 10  // H/s per 1 USDT
+}
+
+/* --- Minimal state --- */
+let provider = null;
+let signer = null;
+let user = null;
+let userHashrate = 5.0; // default starting H/s
+let userBalance = 0.0;  // in USD (demo)
 const coins = [
-  {name:"Bitcoin", symbol:"BTC"},
-  {name:"Ethereum", symbol:"ETH"},
-  {name:"BNB", symbol:"BNB"},
-  {name:"Dogecoin", symbol:"DOGE"},
-  {name:"Litecoin", symbol:"LTC"},
-  {name:"Polygon", symbol:"POL"},
-  {name:"USDT", symbol:"USDT"},
-  {name:"USDC", symbol:"USDC"},
-  {name:"Shiba Inu", symbol:"SHIB"},
-  {name:"TON", symbol:"TON"},
-  {name:"Tron", symbol:"TRX"},
-  {name:"Monero", symbol:"XMR"},
-  {name:"DAI", symbol:"DAI"},
-  {name:"Dogs", symbol:"DOGS"},
-  {name:"NotCoin", symbol:"NOT"},
-  {name:"Solana", symbol:"SOL"}
+  {name: "BNB", symbol:"BNB"},
+  {name: "Bitcoin Cash", symbol:"BCH"},
+  {name: "Bitcoin", symbol:"BTC"},
+  {name: "DAI", symbol:"DAI"},
+  {name: "Dogecoin", symbol:"DOGE"},
+  {name: "Dogs", symbol:"DOGS"},
+  {name: "Ethereum", symbol:"ETH"},
+  {name: "Litecoin", symbol:"LTC"},
+  {name: "NotCoin", symbol:"NOT"},
+  {name: "Polygon", symbol:"POL"},
+  {name: "Shiba Inu", symbol:"SHIB"},
+  {name: "Solana", symbol:"SOL"},
+  {name: "Toncoin", symbol:"TON"},
+  {name: "Tron", symbol:"TRX"},
+  {name: "USD Coin", symbol:"USDC"},
+  {name: "Tether", symbol:"USDT"},
+  {name: "Monero", symbol:"XMR"}
 ];
 
-let user = null;
-let userHashrate = 5.0;
-let userBalance = 0;
+/* --- Helpers & UI --- */
+const $ = sel => document.querySelector(sel);
+const setText = (sel, txt)=>{ const el=$(sel); if(el) el.textContent=txt; };
 
-// Hàm lưu user
-function setCurrentUser(u) { user = u; }
+function updateHeaderNetwork(name){ setText('#netName', name) }
 
-// Logout
-document.getElementById('logoutBtn').addEventListener('click', ()=>{
-  user = null;
-  userHashrate = 5.0;
-  userBalance = 0;
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('loginModal').style.display = 'flex';
-});
+/* Login UI */
+$('#openLogin').addEventListener('click', ()=>{ $('#loginModal').style.display='flex'; $('#emailInput').focus(); });
+$('#closeLogin').addEventListener('click', ()=>{ $('#loginModal').style.display='none'; });
+$('#doLogin').addEventListener('click', doLogin);
 
-// Render bảng coin
-function renderCoinTable(){
-  const tbody = document.querySelector('#coinTable tbody');
+function doLogin(){
+  const email = $('#emailInput').value.trim();
+  if(!email){ alert('Enter email'); $('#emailInput').focus(); return; }
+  user = { email };
+  localStorage.setItem('cm_user', JSON.stringify(user));
+  $('#loginModal').style.display='none';
+  initDashboard();
+}
+
+/* Auto-login if saved */
+(function(){
+  const saved = localStorage.getItem('cm_user');
+  if(saved){ user = JSON.parse(saved); initDashboard(); } else { $('#loginModal').style.display='none'; }
+})();
+
+function initDashboard(){
+  $('#loginModal').style.display='none';
+  $('#dashboard').style.display='block';
+  $('#userEmail').textContent = user.email;
+  $('#userHashrate').textContent = userHashrate.toFixed(2);
+  $('#userBalance').textContent = userBalance.toFixed(2);
+  document.getElementById('userArea').innerHTML = `<div style="display:flex;gap:8px;align-items:center">
+    <div class="small">${user.email}</div>
+    <button id="logoutBtn" class="btn secondary">Logout</button>
+  </div>`;
+  $('#logoutBtn').addEventListener('click', ()=>{
+    localStorage.removeItem('cm_user'); user = null; location.reload();
+  });
+  renderCoins();
+  startSimulatedTx();
+}
+
+/* Render coin table */
+function renderCoins(){
+  const tbody = $('#coinTable tbody');
   tbody.innerHTML = '';
   coins.forEach(c=>{
     const tr = document.createElement('tr');
+    const pool = `${Math.floor(Math.random()*2000)+200} kH/s`;
     tr.innerHTML = `
       <td>${c.name}</td>
       <td>${c.symbol}</td>
-      <td id="${c.symbol}-bal">0.00000000</td>
-      <td>${Math.floor(Math.random()*1000)} kH/s</td>
-      <td id="${c.symbol}-hash">0 H/s</td>
-      <td>
-        <div class="progress-bar"><div id="${c.symbol}-progress" class="progress-bar-inner"></div></div>
-      </td>
-      <td><button class="mineBtn">Mine</button></td>
+      <td id="bal-${c.symbol}">0.00000000</td>
+      <td>${pool}</td>
+      <td id="hash-${c.symbol}">0 H/s</td>
+      <td><div class="progress"><i id="prog-${c.symbol}" style="width:0%"></i></div></td>
+      <td><button class="btn" data-coin="${c.symbol}" onclick="mine('${c.symbol}')">Mine</button></td>
     `;
-    tr.querySelector('.mineBtn').addEventListener('click',()=>{
-      mineCoin(c.symbol);
-    });
     tbody.appendChild(tr);
   });
 }
 
-// Mining function
-function mineCoin(symbol){
-  const hashIncrease = userHashrate / 1000;
-  const balCell = document.getElementById(symbol+'-bal');
-  const hashCell = document.getElementById(symbol+'-hash');
-  const progBar = document.getElementById(symbol+'-progress');
-
-  let bal = parseFloat(balCell.textContent);
-  bal += hashIncrease;
-  balCell.textContent = bal.toFixed(8);
-  hashCell.textContent = hashIncrease.toFixed(2) + ' H/s';
-
-  // Tăng progress (giới hạn 100%)
-  let progress = parseFloat(progBar.style.width) || 0;
-  progress += hashIncrease; // tăng theo H/s
-  if(progress>100) progress=100;
-  progBar.style.width = progress+'%';
-
-  userBalance += hashIncrease * 0.001; // demo USD
-  document.getElementById('userBalance').textContent = userBalance.toFixed(2);
+/* Mining: click Mine (demo) increases coin balance based on userHashrate */
+function mine(symbol){
+  const inc = userHashrate / 1000; // demo conversion
+  const balEl = document.getElementById('bal-'+symbol);
+  const hashEl = document.getElementById('hash-'+symbol);
+  const progEl = document.getElementById('prog-'+symbol);
+  let bal = parseFloat(balEl.textContent) || 0;
+  bal += inc;
+  balEl.textContent = bal.toFixed(8);
+  hashEl.textContent = (inc).toFixed(2) + ' H/s';
+  let cur = parseFloat(progEl.style.width) || 0;
+  cur += inc; if(cur>100) cur=100;
+  progEl.style.width = cur + '%';
+  userBalance += inc * 0.001;
+  $('#userBalance').textContent = userBalance.toFixed(2);
 }
 
-// Buy Boost
-document.getElementById('buyBoost').addEventListener('click',()=>{
-  const usdt = parseFloat(document.getElementById('usdtInput').value);
-  if(isNaN(usdt) || usdt<=0){ alert('Enter valid USDT'); return; }
-  userHashrate += usdt * 10; // 1 USDT = 10 H/s bonus
-  alert('Hashrate boosted by '+(usdt*10)+' H/s!');
-  document.getElementById('userHashrate').textContent = userHashrate.toFixed(2);
+/* ========== Web3 (ethers.js) integration ========== */
+const ERC20_ABI = [
+  "function decimals() view returns (uint8)",
+  "function symbol() view returns (string)",
+  "function transfer(address to, uint256 amount) returns (bool)"
+];
+
+async function connectWallet(){
+  if (!window.ethereum){ alert('MetaMask (or compatible) not found. Please install.'); return false; }
+  try{
+    provider = new ethers.BrowserProvider(window.ethereum, "any");
+    await provider.send("eth_requestAccounts", []);
+    signer = await provider.getSigner();
+    const network = await provider.getNetwork();
+    updateHeaderNetwork(network.name + ' #' + network.chainId);
+    return true;
+  }catch(e){ console.error(e); alert('Wallet connect canceled or error.'); return false; }
+}
+
+function getUsdtAddress(){
+  return CONFIG.USDT_CONTRACTS[CONFIG.CHAIN] || CONFIG.USDT_CONTRACTS['bsc'];
+}
+
+async function buyBoost(){
+  if(!signer){ const ok = await connectWallet(); if(!ok) return; }
+  if(!CONFIG.RECEIVER_ADDRESS || CONFIG.RECEIVER_ADDRESS.includes('REPLACE')){ alert('ERROR: Set RECEIVER_ADDRESS in CONFIG'); return; }
+  const amount = parseFloat($('#buyAmount').value);
+  if(isNaN(amount) || amount <= 0){ alert('Enter valid USDT amount'); return; }
+  const usdtAddr = getUsdtAddress();
+  const contract = new ethers.Contract(usdtAddr, ERC20_ABI, signer);
+  let decimals = 6;
+  try{ decimals = await contract.decimals(); }catch(e){ console.warn('Could not read decimals, fallback to 6'); }
+  const amountUnits = ethers.parseUnits(amount.toString(), decimals);
+  try{
+    $('#txStatus').style.display='block';
+    $('#txStatus').textContent = 'Waiting for wallet confirmation...';
+    const tx = await contract.transfer(CONFIG.RECEIVER_ADDRESS, amountUnits);
+    $('#txStatus').textContent = 'Transaction sent: ' + tx.hash;
+    const receipt = await provider.waitForTransaction(tx.hash, 1);
+    if(receipt && receipt.confirmations && receipt.confirmations > 0){
+      $('#txStatus').textContent = 'Confirmed: ' + tx.hash + ' — Boost applied';
+      const extra = amount * CONFIG.BOOST_RATE;
+      userHashrate += extra;
+      $('#userHashrate').textContent = userHashrate.toFixed(2);
+      pushSimulatedTx({user: user.email, type:'BUY', amount: amount + ' USDT', tx: tx.hash, time:'Just now'});
+    }else{
+      $('#txStatus').textContent = 'Transaction pending or failed: ' + tx.hash;
+    }
+  }catch(err){
+    console.error(err);
+    $('#txStatus').textContent = 'Error: ' + (err.message || err);
+  }
+}
+
+$('#connectWallet').addEventListener('click', async ()=>{
+  const ok = await connectWallet();
+  if(ok) $('#connectWallet').textContent = 'Wallet connected';
+});
+$('#buyBtn').addEventListener('click', buyBoost);
+
+/* ========== simulated live txs list & faucet ========== */
+function pushSimulatedTx(row){
+  const box = document.getElementById('txList');
+  const el = document.createElement('div');
+  el.style.padding='8px'; el.style.borderBottom='1px solid #eee';
+  el.innerHTML = `<strong>${row.user}</strong> — ${row.type} — ${row.amount} <div class="small">tx: ${row.tx} • ${row.time}</div>`;
+  box.insertBefore(el, box.firstChild);
+  if(box.children.length > 80) box.removeChild(box.lastChild);
+}
+
+function startSimulatedTx(){
+  pushSimulatedTx({user:'wil_***',type:'WITHDRAW',amount:'0.095556 DOGE',tx:'98da78',time:'Just now'});
+  pushSimulatedTx({user:'vuac_***',type:'CLAIM',amount:'1 H/s',tx:'claim01',time:'Just now'});
+  setInterval(()=>{
+    const u = 'user'+Math.floor(Math.random()*999);
+    const types = ['WITHDRAW','CLAIM'];
+    const t = types[Math.floor(Math.random()*types.length)];
+    pushSimulatedTx({user:u,type:t,amount:(Math.random()*1).toFixed(6)+' DOGE',tx:Math.random().toString(36).slice(2,10),time:'Just now'});
+  }, 3000);
+}
+
+/* ========== INIT UI ========== */
+updateHeaderNetwork(CONFIG.CHAIN.toUpperCase());
+document.addEventListener('DOMContentLoaded', ()=>{
+  const saved = localStorage.getItem('cm_user');
+  if(saved){ user = JSON.parse(saved); initDashboard(); } else { $('#loginModal').style.display='none'; }
 });
 
-// Login action
-document.getElementById('modalLogin').addEventListener('click', ()=>{
-  const val = document.getElementById('emailInput').value.trim();
-  if(!val){ alert('Please enter email or username'); return; }
-  setCurrentUser({name: val, display: val});
-  document.getElementById('user-email').textContent = val;
-  document.getElementById('loginModal').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-  document.getElementById('userHashrate').textContent = userHashrate.toFixed(2);
-  renderCoinTable();
-});
+/* expose mine function to inline onclick */
+window.mine = mine;
+
 </script>
-
 </body>
 </html>
