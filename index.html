@@ -9,8 +9,9 @@
   *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
   body{background:#f5f5f5;color:#111}
   header{background:#0a0a0a;color:#fff;padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:12px}
   header img{height:40px}
-  nav a{color:#fff;margin-left:14px;text-decoration:none;font-weight:700}
+  nav a{color:#fff;margin-left:14px;text-decoration:none;font-weight:700;cursor:pointer}
   nav a:hover{color:#ff9900}
   .coins{background:#222;color:#fff;padding:10px 14px;overflow-x:auto;white-space:nowrap}
   .coins span{display:inline-block;margin-right:14px;padding:6px 10px;background:#333;border-radius:6px;font-size:14px}
@@ -24,20 +25,36 @@
   th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #eee;font-size:14px}
   .avatar{width:30px;height:30px;border-radius:50%;vertical-align:middle;margin-right:8px}
   .btn{display:inline-block;padding:10px 18px;background:#ff9900;color:#fff;border-radius:6px;border:0;cursor:pointer}
+  .btn.secondary{background:#0a0a0a}
   footer{background:#0a0a0a;color:#fff;padding:14px;text-align:center;margin-top:12px;border-top-left-radius:6px;border-top-right-radius:6px}
+  .user-info{display:flex;gap:10px;align-items:center}
+  /* Modal */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:40}
+  .modal{background:#fff;padding:18px;border-radius:8px;min-width:300px;box-shadow:0 6px 20px rgba(0,0,0,0.2)}
+  .modal h3{margin-bottom:10px}
+  .input{width:100%;padding:10px;margin-bottom:10px;border:1px solid #ddd;border-radius:6px}
+  .txt-muted{color:#666;font-size:13px}
   @media(max-width:720px){.coins span{padding:6px 8px;font-size:13px}}
 </style>
 </head>
 <body>
 
 <header>
-  <div style="display:flex;align-items:center;gap:12px">
+  <div class="brand">
     <img src="logo.png" alt="Crypto Mining Logo">
     <strong style="font-size:20px">Crypto Mining</strong>
   </div>
-  <nav>
-    <a href="#">Home</a><a href="#">FAQ</a><a href="#">Contact</a><a href="#">Login</a>
-  </nav>
+
+  <div style="display:flex;align-items:center;gap:12px">
+    <nav>
+      <a id="nav-home">Home</a><a id="nav-faq">FAQ</a><a id="nav-contact">Contact</a>
+    </nav>
+
+    <div class="user-info" id="user-area">
+      <!-- Will be replaced by login button or user info -->
+      <button class="btn secondary" id="login-btn">Login</button>
+    </div>
+  </div>
 </header>
 
 <div class="coins" aria-hidden="true">
@@ -86,7 +103,9 @@
         <tbody></tbody>
       </table>
     </div>
-    <div style="margin-top:10px"><button class="btn" id="claim-btn">Claim 1 H/s (demo)</button></div>
+    <div style="margin-top:10px">
+      <button class="btn" id="claim-btn">Claim 1 H/s (demo)</button>
+    </div>
   </section>
 
   <section>
@@ -99,129 +118,172 @@
   Crypto Mining © 2025. Hashrate Faucet Platform. &nbsp; <a href="#" style="color:#ff9900;text-decoration:none">Telegram Channel</a>
 </footer>
 
+<!-- Login Modal -->
+<div class="modal-backdrop" id="modal">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h3>Login (demo)</h3>
+    <input id="email-input" class="input" placeholder="Enter email or username" />
+    <div class="txt-muted">This is a demo login stored locally in your browser only (no server).</div>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+      <button class="btn secondary" id="modal-close">Cancel</button>
+      <button class="btn" id="modal-login">Login</button>
+    </div>
+  </div>
+</div>
+
 <script>
-/* ====== Simulated live data ======
-   - New fake txs appear randomly (every 2–6s)
-   - Faucet claims appear randomly and by pressing Claim button
-   - Keep limited rows (maxRows) to avoid huge table
-*/
-
-const coinPool = ['DOGE','POL','BTC','ETH','LTC','SOL','BNB','TRX','TON','BCH','XMR','MATIC','USDT','USDC','DAI','SHIB'];
-const names = ['vuac','cohe','wil','herb','meoi','jose','resh','sath','ytpa','kito','7sun','shoa','mo24','azri','spam','osve','kbhn'];
-const domains = ['@gmail.com','@yahoo.com','@outlook.com','@hotmail.com'];
-const txChars = 'abcdef0123456789';
-const maxTxRows = 50;
-const maxFaucetRows = 30;
-
+/* ---------- Helpers ---------- */
+function qs(sel){return document.querySelector(sel)}
+function qsa(sel){return Array.from(document.querySelectorAll(sel))}
 function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
-function maskEmail(name){ // e.g. vuac***@outlook.com
-  const part = name + '***' + pick(domains);
-  return part;
+const txChars = 'abcdef0123456789'
+const names = ['vuac','cohe','wil','herb','meoi','jose','resh','sath','ytpa','kito','7sun','shoa','mo24','azri','spam','osve','kbhn']
+const domains = ['@gmail.com','@yahoo.com','@outlook.com','@hotmail.com']
+const coinPool = ['DOGE','POL','BTC','ETH','LTC','SOL','BNB','TRX','TON','BCH','XMR','MATIC','USDT','USDC','DAI','SHIB']
+
+function maskEmail(name){
+  return name+'***'+pick(domains)
 }
-function genTxId(hexLen=12){
-  let s=''; for(let i=0;i<hexLen;i++) s+=txChars.charAt(Math.floor(Math.random()*txChars.length));
-  return s;
-}
+function genTxId(len=8){ let s=''; for(let i=0;i<len;i++) s+=txChars.charAt(Math.floor(Math.random()*txChars.length)); return s }
 function formatAmount(coin){
-  if(coin==='SHIB' || coin==='DOGE') return (Math.random()*1000).toFixed(6) + ' ' + coin;
-  if(coin==='BTC' || coin==='ETH' || coin==='BNB' || coin==='TON') return (Math.random()*0.5).toFixed(6) + ' ' + coin;
-  return (Math.random()*5).toFixed(6) + ' ' + coin;
+  if(coin==='SHIB' || coin==='DOGE') return (Math.random()*1000).toFixed(6)+' '+coin
+  if(coin==='BTC' || coin==='ETH' || coin==='BNB' || coin==='TON') return (Math.random()*0.5).toFixed(6)+' '+coin
+  return (Math.random()*5).toFixed(6)+' '+coin
 }
-function timeLabel(){ return 'Just now' } // keep simple
+function timeLabel(){ return 'Just now' }
 
-// DOM refs
-const txBody = document.querySelector('#transactions tbody');
-const faucetBody = document.querySelector('#faucet tbody');
-const txScroll = document.getElementById('tx-scroll');
-const faucetScroll = document.getElementById('faucet-scroll');
+/* ---------- Avatar generator (data URI) ---------- */
+function avatarFor(name){
+  const colors = ['#FFB54D','#6EC1E4','#A0D468','#E26A6A','#9B59B6','#4BC0C0','#F39C12','#3498DB']
+  let sum=0; for(let i=0;i<name.length;i++) sum+=name.charCodeAt(i)
+  const color = colors[sum % colors.length]
+  const initial = name.charAt(0).toUpperCase()
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><rect width='100%' height='100%' fill='${color}' rx='32' ry='32'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='30' fill='#fff'>${initial}</text></svg>`
+  return 'data:image/svg+xml;utf8,'+encodeURIComponent(svg)
+}
 
-// create one tx row
+/* ---------- DOM refs ---------- */
+const txBody = qs('#transactions tbody')
+const faucetBody = qs('#faucet tbody')
+const txScroll = qs('#tx-scroll')
+const faucetScroll = qs('#faucet-scroll')
+const modal = qs('#modal')
+const emailInput = qs('#email-input')
+const loginBtn = qs('#login-btn')
+const modalLogin = qs('#modal-login')
+const modalClose = qs('#modal-close')
+const claimBtn = qs('#claim-btn')
+const userArea = qs('#user-area')
+
+/* ---------- Local storage user ---------- */
+const STORAGE_KEY = 'cm_demo_user'
+function getCurrentUser(){ return JSON.parse(localStorage.getItem(STORAGE_KEY)) }
+function setCurrentUser(u){ localStorage.setItem(STORAGE_KEY, JSON.stringify(u)) }
+function clearCurrentUser(){ localStorage.removeItem(STORAGE_KEY) }
+
+function renderUserArea(){
+  const u = getCurrentUser()
+  if(u){
+    userArea.innerHTML = `<div style="display:flex;align-items:center;gap:8px"><img src="${avatarFor(u.name)}" class="avatar" alt=""><div style="font-weight:700">${u.display}</div><button class="btn secondary" id="logout-btn">Logout</button></div>`
+    qs('#logout-btn').addEventListener('click', ()=>{
+      clearCurrentUser(); renderUserArea()
+    })
+  } else {
+    userArea.innerHTML = `<button class="btn secondary" id="login-btn">Login</button>`
+    qs('#login-btn').addEventListener('click', ()=>openModal())
+  }
+}
+
+/* ---------- Modal control ---------- */
+function openModal(){
+  emailInput.value = ''
+  modal.style.display = 'flex'
+  setTimeout(()=>emailInput.focus(),50)
+}
+function closeModal(){ modal.style.display = 'none' }
+modalClose.addEventListener('click', closeModal)
+modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal() })
+
+/* ---------- Create rows ---------- */
 function createTxRow({user,type,amount,tx,time}){
-  const tr = document.createElement('tr');
-  const userCell = `<td><img class="avatar" src="${avatarFor(user)}" alt="">${maskEmail(user)}</td>`;
-  tr.innerHTML = userCell + `<td>${type}</td><td>${amount}</td><td>${tx}</td><td>${time}</td>`;
-  return tr;
+  const tr = document.createElement('tr')
+  const userCell = `<td><img class="avatar" src="${avatarFor(user)}" alt="">${maskEmail(user)}</td>`
+  tr.innerHTML = userCell + `<td>${type}</td><td>${amount}</td><td>${tx}</td><td>${time}</td>`
+  return tr
 }
 function createFaucetRow({user,reward,time}){
-  const tr = document.createElement('tr');
-  tr.innerHTML = `<td><img class="avatar" src="${avatarFor(user)}" alt="">${maskEmail(user)}</td><td>${reward}</td><td>${time}</td>`;
-  return tr;
-}
-// simple avatars (data URI colored circle using canvas)
-function avatarFor(name){
-  // deterministic color from name
-  const colors = ['#FFB54D','#6EC1E4','#A0D468','#E26A6A','#9B59B6','#4BC0C0','#F39C12','#3498DB'];
-  let sum=0; for(let i=0;i<name.length;i++) sum+=name.charCodeAt(i);
-  const color = colors[sum % colors.length];
-  // return a tiny SVG data URI circle with initial letter
-  const initial = name.charAt(0).toUpperCase();
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><rect width='100%' height='100%' fill='${color}' rx='32' ry='32'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='30' fill='#fff'>${initial}</text></svg>`;
-  return 'data:image/svg+xml;utf8,'+encodeURIComponent(svg);
+  const tr = document.createElement('tr')
+  tr.innerHTML = `<td><img class="avatar" src="${avatarFor(user)}" alt="">${maskEmail(user)}</td><td>${reward}</td><td>${time}</td>`
+  return tr
 }
 
-// push new tx to top, keep max rows
-function pushTx(){
-  const user = pick(names);
-  const coin = pick(coinPool);
-  const row = {
-    user,
-    type: 'WITHDRAW',
-    amount: formatAmount(coin),
-    tx: genTxId(8) + '...' + genTxId(4),
-    time: timeLabel()
-  };
-  const tr = createTxRow(row);
-  txBody.insertBefore(tr, txBody.firstChild);
-  // cap rows
-  while(txBody.children.length > maxTxRows) txBody.removeChild(txBody.lastChild);
-  // flash highlight
-  tr.style.background = '#eaf7ff';
-  setTimeout(()=>{ tr.style.transition='background 800ms'; tr.style.background=''; },800);
+/* ---------- Push functions ---------- */
+const MAX_TX = 80, MAX_FAUCET = 50
+function pushTx(userOverride=null){
+  const user = userOverride || pick(names)
+  const coin = pick(coinPool)
+  const row = { user, type:'WITHDRAW', amount: formatAmount(coin), tx: genTxId(8)+'...'+genTxId(4), time: timeLabel() }
+  const tr = createTxRow(row)
+  txBody.insertBefore(tr, txBody.firstChild)
+  while(txBody.children.length > MAX_TX) txBody.removeChild(txBody.lastChild)
+  tr.style.background = '#eaf7ff'
+  setTimeout(()=>tr.style.transition='background 700ms',10)
+  setTimeout(()=>tr.style.background='',800)
 }
 
-// push faucet claim
-function pushFaucet(user=null,reward=null){
-  const u = user || pick(names);
-  const r = reward || (rand(1,5) + '.0 H/s');
-  const row = { user: u, reward: r, time: timeLabel() };
-  const tr = createFaucetRow(row);
-  faucetBody.insertBefore(tr, faucetBody.firstChild);
-  while(faucetBody.children.length > maxFaucetRows) faucetBody.removeChild(faucetBody.lastChild);
-  tr.style.background = '#fff7e6';
-  setTimeout(()=>{ tr.style.transition='background 800ms'; tr.style.background=''; },800);
+function pushFaucet(userOverride=null, rewardOverride=null){
+  const user = userOverride || pick(names)
+  const reward = rewardOverride || (rand(1,5) + '.0 H/s')
+  const row = { user, reward, time: timeLabel() }
+  const tr = createFaucetRow(row)
+  faucetBody.insertBefore(tr, faucetBody.firstChild)
+  while(faucetBody.children.length > MAX_FAUCET) faucetBody.removeChild(faucetBody.lastChild)
+  tr.style.background = '#fff7e6'
+  setTimeout(()=>tr.style.transition='background 700ms',10)
+  setTimeout(()=>tr.style.background='',800)
 }
 
-// random live simulation interval
+/* ---------- Simulation (live) ---------- */
 function startSimulation(){
-  // seed a few initial rows
-  for(let i=0;i<6;i++){ pushTx(); pushFaucet(); }
+  // seed initial rows
+  for(let i=0;i<6;i++){ pushTx(); pushFaucet() }
   // new tx every 2-5s
-  setInterval(()=>{ pushTx(); }, rand(2000,5000));
+  setInterval(()=>{ pushTx() }, rand(2000,5000))
   // new faucet claim every 3-8s
-  setInterval(()=>{ if(Math.random()>0.4) pushFaucet(); }, rand(3000,8000));
-  // small auto-scroll to create smooth visual if content overflows
+  setInterval(()=>{ if(Math.random()>0.4) pushFaucet() }, rand(3000,8000))
+  // small auto-scroll for visual
   setInterval(()=>{
-    // tx scroll
-    txScroll.scrollTop = Math.max(0, txScroll.scrollTop + 1);
-    if(txScroll.scrollTop > txBody.scrollHeight - txScroll.clientHeight) txScroll.scrollTop = 0;
-    // faucet
-    faucetScroll.scrollTop = Math.max(0, faucetScroll.scrollTop + 1);
-    if(faucetScroll.scrollTop > faucetBody.scrollHeight - faucetScroll.clientHeight) faucetScroll.scrollTop = 0;
-  }, 80);
+    txScroll.scrollTop = (txScroll.scrollTop + 1) % Math.max(1, txBody.scrollHeight - txScroll.clientHeight)
+    faucetScroll.scrollTop = (faucetScroll.scrollTop + 1) % Math.max(1, faucetBody.scrollHeight - faucetScroll.clientHeight)
+  }, 80)
 }
 
-// Claim button to simulate manual claim
-document.getElementById('claim-btn').addEventListener('click', ()=>{
-  pushFaucet('youuser', '1.0 H/s');
-  // brief feedback
-  const b = document.getElementById('claim-btn');
-  b.textContent = 'Claimed ✓';
-  setTimeout(()=>b.textContent='Claim 1 H/s (demo)',1200);
-});
+/* ---------- Hook up claim button ---------- */
+claimBtn.addEventListener('click', ()=>{
+  const u = getCurrentUser()
+  if(!u){ openModal(); return }
+  pushFaucet(u.name, '1.0 H/s')
+  // visual feedback
+  claimBtn.textContent = 'Claimed ✓'
+  setTimeout(()=>claimBtn.textContent = 'Claim 1 H/s (demo)', 1200)
+})
 
-// start
-startSimulation();
+/* ---------- Modal login action ---------- */
+modalLogin.addEventListener('click', ()=>{
+  const val = emailInput.value.trim()
+  if(!val){ alert('Please enter email or username'); emailInput.focus(); return }
+  // store minimal demo user
+  const display = (val.includes('@')) ? (val.split('@')[0] + '***@' + val.split('@')[1]) : val
+  const userObj = { name: val.replace(/[^a-z0-9]/gi,'').toLowerCase() || 'user', display }
+  setCurrentUser(userObj)
+  renderUserArea()
+  closeModal()
+})
+
+/* ---------- Init ---------- */
+renderUserArea()
+startSimulation()
 </script>
 
 </body>
