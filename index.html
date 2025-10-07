@@ -1,98 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crypto Mining - Crypto Mining Platform</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Crypto Mining</title>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
 <style>
-  body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; color: #333; }
-  header { background: #111; color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
-  header nav a { color: #fff; margin-left: 15px; text-decoration: none; }
-  .coins { display: flex; flex-wrap: wrap; padding: 20px; background: #222; color: #fff; }
-  .coins span { margin: 5px 10px; padding: 5px 10px; background: #444; border-radius: 5px; }
-  .section { padding: 20px; margin: 20px; background: #fff; border-radius: 8px; }
-  h2 { margin-top: 0; }
-  table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-  table, th, td { border: 1px solid #ccc; }
-  th, td { padding: 8px; text-align: left; }
-  .button { display: inline-block; padding: 10px 20px; margin: 10px 0; background: #111; color: #fff; border-radius: 5px; text-decoration: none; }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+  body{background:#f5f5f5;color:#111}
+  header{background:#0a0a0a;color:#fff;padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
+  header img{height:40px}
+  nav a{color:#fff;margin-left:14px;text-decoration:none;font-weight:700}
+  nav a:hover{color:#ff9900}
+  .coins{background:#222;color:#fff;padding:10px 14px;overflow-x:auto;white-space:nowrap}
+  .coins span{display:inline-block;margin-right:14px;padding:6px 10px;background:#333;border-radius:6px;font-size:14px}
+  main{max-width:1200px;margin:16px auto;padding:0 16px}
+  section{background:#fff;padding:18px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.08);margin-bottom:14px}
+  h2{font-size:18px;margin-bottom:10px;color:#0a0a0a}
+  p{margin-bottom:8px}
+  .scrolling-table{overflow:hidden;height:220px}
+  table{width:100%;border-collapse:collapse}
+  thead tr{background:#fafafa;position:sticky;top:0}
+  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #eee;font-size:14px}
+  .avatar{width:30px;height:30px;border-radius:50%;vertical-align:middle;margin-right:8px}
+  .btn{display:inline-block;padding:10px 18px;background:#ff9900;color:#fff;border-radius:6px;border:0;cursor:pointer}
+  footer{background:#0a0a0a;color:#fff;padding:14px;text-align:center;margin-top:12px;border-top-left-radius:6px;border-top-right-radius:6px}
+  @media(max-width:720px){.coins span{padding:6px 8px;font-size:13px}}
 </style>
 </head>
 <body>
 
 <header>
-  <div><strong>Crypto Mining</strong></div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <img src="logo.png" alt="Crypto Mining Logo">
+    <strong style="font-size:20px">Crypto Mining</strong>
+  </div>
   <nav>
-    <a href="#">Home</a>
-    <a href="#">FAQ</a>
-    <a href="#">Contact</a>
-    <a href="#">Login</a>
+    <a href="#">Home</a><a href="#">FAQ</a><a href="#">Contact</a><a href="#">Login</a>
   </nav>
 </header>
 
-<section class="coins">
-  <span>Bitcoin</span>
-  <span>Ethereum</span>
-  <span>Litecoin</span>
-  <span>Solana</span>
-  <span>Dogecoin</span>
-  <span>BNB</span>
-  <span>TRON</span>
-  <span>TON</span>
-  <span>Bitcoin Cash</span>
-  <span>Monero</span>
-  <span>Polygon</span>
-  <span>USDT</span>
-  <span>USDC</span>
-  <span>DAI</span>
-  <span>SHIB</span>
-  <span>NOT</span>
-  <span>DOGS</span>
-</section>
+<div class="coins" aria-hidden="true">
+  <span>Bitcoin</span><span>Ethereum</span><span>Litecoin</span><span>Solana</span>
+  <span>Dogecoin</span><span>BNB</span><span>TRON</span><span>TON</span>
+  <span>Bitcoin Cash</span><span>Monero</span><span>Polygon</span><span>USDT</span>
+  <span>USDC</span><span>DAI</span><span>SHIB</span><span>NOT</span><span>DOGS</span>
+</div>
 
-<section class="section">
-  <h2>Hashrate Faucet</h2>
-  <p>Crypto Mining operates Aleo mining operations to provide consistent returns of 0.25-0.45% daily. We accept deposits in multiple cryptocurrencies.</p>
-  <p><strong>Daily Returns:</strong> 0.25-0.45%</p>
-  <p><strong>Supported Coins:</strong> 15+</p>
-  <p><strong>Reviews:</strong> Trustpilot ↗</p>
-</section>
+<main>
+  <section>
+    <h2>Hashrate Faucet</h2>
+    <p>Crypto Mining operates Aleo mining operations to provide consistent returns of <strong>0.25–0.45%</strong> daily. We accept deposits in multiple cryptocurrencies.</p>
+  </section>
 
-<section class="section">
-  <h2>Latest Transactions</h2>
-  <table>
-    <tr><th>User</th><th>Type</th><th>Amount</th><th>TX ID</th><th>Time</th></tr>
-    <tr><td>wil_***@hotmail.com</td><td>WITHDRAW</td><td>0.095556 DOGE</td><td>98da78...ee27d3</td><td>Just now</td></tr>
-    <tr><td>herb***@gmail.com</td><td>WITHDRAW</td><td>0.012471 POL</td><td>0x49d1...32f0b8</td><td>2 min ago</td></tr>
-    <tr><td>meoi***@gmail.com</td><td>WITHDRAW</td><td>0.738744 DOGE</td><td>69852f...b4ec9a</td><td>8 min ago</td></tr>
-  </table>
-</section>
+  <section style="display:flex;gap:12px;flex-wrap:wrap">
+    <div style="flex:1;min-width:160px;background:#fff;padding:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
+      <h2>Daily Returns</h2><p><strong>0.25–0.45%</strong></p>
+    </div>
+    <div style="flex:1;min-width:160px;background:#fff;padding:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
+      <h2>Supported Coins</h2><p><strong>15+</strong></p>
+    </div>
+    <div style="flex:1;min-width:160px;background:#fff;padding:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
+      <h2>Reviews</h2><p>Trustpilot ↗</p>
+    </div>
+  </section>
 
-<section class="section">
-  <h2>Free Faucet</h2>
-  <p>Claim free hashrate every day from our faucet. Start earning immediately without any investment.</p>
-  <table>
-    <tr><th>User</th><th>Reward</th><th>Time</th></tr>
-    <tr><td>vuac***@outlook.com</td><td>1.0 H/s</td><td>Just now</td></tr>
-    <tr><td>cohe***@gmail.com</td><td>1.0 H/s</td><td>Just now</td></tr>
-  </table>
-  <a href="#" class="button">Get Started</a>
-</section>
+  <section>
+    <h2>Latest Transactions</h2>
+    <div class="scrolling-table" id="tx-scroll">
+      <table id="transactions">
+        <thead>
+          <tr><th>User</th><th>Type</th><th>Amount</th><th>TX ID</th><th>Time</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
 
-<section class="section">
-  <h2>Affiliate Program</h2>
-  <p>Earn additional income by referring friends to Crypto Mining. Get 2% from their deposits credited to your balance and 2 H/s each new friend to your hashrate.</p>
-  <table>
-    <tr><th>User</th><th>Invited</th><th>Status</th><th>Registered</th></tr>
-    <tr><td>bgeb***@gmail.com</td><td>cdca***@gmail.com</td><td>Active</td><td>Just now</td></tr>
-    <tr><td>linh***@gmail.com</td><td>lamn***@gmail.com</td><td>Active</td><td>3 min ago</td></tr>
-  </table>
-  <a href="#" class="button">Join Program</a>
-</section>
+  <section>
+    <h2>Free Faucet</h2>
+    <p>Claim free hashrate every day from our faucet. Start earning immediately without any investment.</p>
+    <div class="scrolling-table" id="faucet-scroll">
+      <table id="faucet">
+        <thead><tr><th>User</th><th>Reward</th><th>Time</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px"><button class="btn" id="claim-btn">Claim 1 H/s (demo)</button></div>
+  </section>
 
-<footer style="text-align:center; padding:20px; background:#111; color:#fff;">
-  Crypto Mining © 2025. Crypto Mining Platform. | <a href="#" style="color:#fff;">Telegram Channel</a>
+  <section>
+    <h2>Affiliate Program</h2>
+    <p>Earn additional income by referring friends. Get 2% from their deposits credited to your balance and 2 H/s each new friend to your hashrate.</p>
+  </section>
+</main>
+
+<footer>
+  Crypto Mining © 2025. Hashrate Faucet Platform. &nbsp; <a href="#" style="color:#ff9900;text-decoration:none">Telegram Channel</a>
 </footer>
+
+<script>
+/* ====== Simulated live data ======
+   - New fake txs appear randomly (every 2–6s)
+   - Faucet claims appear randomly and by pressing Claim button
+   - Keep limited rows (maxRows) to avoid huge table
+*/
+
+const coinPool = ['DOGE','POL','BTC','ETH','LTC','SOL','BNB','TRX','TON','BCH','XMR','MATIC','USDT','USDC','DAI','SHIB'];
+const names = ['vuac','cohe','wil','herb','meoi','jose','resh','sath','ytpa','kito','7sun','shoa','mo24','azri','spam','osve','kbhn'];
+const domains = ['@gmail.com','@yahoo.com','@outlook.com','@hotmail.com'];
+const txChars = 'abcdef0123456789';
+const maxTxRows = 50;
+const maxFaucetRows = 30;
+
+function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function maskEmail(name){ // e.g. vuac***@outlook.com
+  const part = name + '***' + pick(domains);
+  return part;
+}
+function genTxId(hexLen=12){
+  let s=''; for(let i=0;i<hexLen;i++) s+=txChars.charAt(Math.floor(Math.random()*txChars.length));
+  return s;
+}
+function formatAmount(coin){
+  if(coin==='SHIB' || coin==='DOGE') return (Math.random()*1000).toFixed(6) + ' ' + coin;
+  if(coin==='BTC' || coin==='ETH' || coin==='BNB' || coin==='TON') return (Math.random()*0.5).toFixed(6) + ' ' + coin;
+  return (Math.random()*5).toFixed(6) + ' ' + coin;
+}
+function timeLabel(){ return 'Just now' } // keep simple
+
+// DOM refs
+const txBody = document.querySelector('#transactions tbody');
+const faucetBody = document.querySelector('#faucet tbody');
+const txScroll = document.getElementById('tx-scroll');
+const faucetScroll = document.getElementById('faucet-scroll');
+
+// create one tx row
+function createTxRow({user,type,amount,tx,time}){
+  const tr = document.createElement('tr');
+  const userCell = `<td><img class="avatar" src="${avatarFor(user)}" alt="">${maskEmail(user)}</td>`;
+  tr.innerHTML = userCell + `<td>${type}</td><td>${amount}</td><td>${tx}</td><td>${time}</td>`;
+  return tr;
+}
+function createFaucetRow({user,reward,time}){
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><img class="avatar" src="${avatarFor(user)}" alt="">${maskEmail(user)}</td><td>${reward}</td><td>${time}</td>`;
+  return tr;
+}
+// simple avatars (data URI colored circle using canvas)
+function avatarFor(name){
+  // deterministic color from name
+  const colors = ['#FFB54D','#6EC1E4','#A0D468','#E26A6A','#9B59B6','#4BC0C0','#F39C12','#3498DB'];
+  let sum=0; for(let i=0;i<name.length;i++) sum+=name.charCodeAt(i);
+  const color = colors[sum % colors.length];
+  // return a tiny SVG data URI circle with initial letter
+  const initial = name.charAt(0).toUpperCase();
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><rect width='100%' height='100%' fill='${color}' rx='32' ry='32'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='30' fill='#fff'>${initial}</text></svg>`;
+  return 'data:image/svg+xml;utf8,'+encodeURIComponent(svg);
+}
+
+// push new tx to top, keep max rows
+function pushTx(){
+  const user = pick(names);
+  const coin = pick(coinPool);
+  const row = {
+    user,
+    type: 'WITHDRAW',
+    amount: formatAmount(coin),
+    tx: genTxId(8) + '...' + genTxId(4),
+    time: timeLabel()
+  };
+  const tr = createTxRow(row);
+  txBody.insertBefore(tr, txBody.firstChild);
+  // cap rows
+  while(txBody.children.length > maxTxRows) txBody.removeChild(txBody.lastChild);
+  // flash highlight
+  tr.style.background = '#eaf7ff';
+  setTimeout(()=>{ tr.style.transition='background 800ms'; tr.style.background=''; },800);
+}
+
+// push faucet claim
+function pushFaucet(user=null,reward=null){
+  const u = user || pick(names);
+  const r = reward || (rand(1,5) + '.0 H/s');
+  const row = { user: u, reward: r, time: timeLabel() };
+  const tr = createFaucetRow(row);
+  faucetBody.insertBefore(tr, faucetBody.firstChild);
+  while(faucetBody.children.length > maxFaucetRows) faucetBody.removeChild(faucetBody.lastChild);
+  tr.style.background = '#fff7e6';
+  setTimeout(()=>{ tr.style.transition='background 800ms'; tr.style.background=''; },800);
+}
+
+// random live simulation interval
+function startSimulation(){
+  // seed a few initial rows
+  for(let i=0;i<6;i++){ pushTx(); pushFaucet(); }
+  // new tx every 2-5s
+  setInterval(()=>{ pushTx(); }, rand(2000,5000));
+  // new faucet claim every 3-8s
+  setInterval(()=>{ if(Math.random()>0.4) pushFaucet(); }, rand(3000,8000));
+  // small auto-scroll to create smooth visual if content overflows
+  setInterval(()=>{
+    // tx scroll
+    txScroll.scrollTop = Math.max(0, txScroll.scrollTop + 1);
+    if(txScroll.scrollTop > txBody.scrollHeight - txScroll.clientHeight) txScroll.scrollTop = 0;
+    // faucet
+    faucetScroll.scrollTop = Math.max(0, faucetScroll.scrollTop + 1);
+    if(faucetScroll.scrollTop > faucetBody.scrollHeight - faucetScroll.clientHeight) faucetScroll.scrollTop = 0;
+  }, 80);
+}
+
+// Claim button to simulate manual claim
+document.getElementById('claim-btn').addEventListener('click', ()=>{
+  pushFaucet('youuser', '1.0 H/s');
+  // brief feedback
+  const b = document.getElementById('claim-btn');
+  b.textContent = 'Claimed ✓';
+  setTimeout(()=>b.textContent='Claim 1 H/s (demo)',1200);
+});
+
+// start
+startSimulation();
+</script>
 
 </body>
 </html>
