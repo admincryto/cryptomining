@@ -4,205 +4,149 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Crypto Mining</title>
-<link rel="icon" href="https://cryptologos.cc/logos/bitcoin-btc-logo.png" type="image/png">
 <style>
-body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4; }
-header { background:#222; color:#fff; padding:10px 20px; display:flex; justify-content:space-between; align-items:center; }
-header h1 { margin:0; font-size:1.5em; }
-nav a { color:#fff; margin-left:15px; text-decoration:none; }
-#loginModal, #dashboard { display:none; }
-.modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:flex; justify-content:center; align-items:center; }
-.modal-content { background:#fff; padding:20px; border-radius:8px; width:300px; text-align:center; }
-input[type=email], button { width:100%; padding:10px; margin:5px 0; border-radius:5px; border:1px solid #ccc; }
-button { cursor:pointer; background:#28a745; color:#fff; border:none; }
-table { width:100%; border-collapse:collapse; margin-top:10px; background:#fff; }
-th, td { padding:8px; text-align:center; border:1px solid #ddd; }
-th { background:#222; color:#fff; }
-.balance-row { display:flex; justify-content:space-between; margin:5px 0; padding:5px 10px; background:#fff; border-radius:5px; }
-.section { padding:20px; background:#fff; margin:10px 20px; border-radius:8px; }
-.coin-list { margin:10px 0; }
+    body { margin:0; font-family: Arial, sans-serif; background:#f4f4f4; }
+    header { background:#1a1a1a; color:#fff; padding:10px 20px; display:flex; justify-content:space-between; align-items:center; }
+    header .logo { font-weight:bold; font-size:20px; }
+    header nav a { color:#fff; margin-left:15px; text-decoration:none; }
+    header .user { font-size:14px; }
+    .coins { background:#333; color:#fff; padding:10px; overflow-x:auto; white-space:nowrap; }
+    .coins span { margin-right:15px; cursor:pointer; }
+    .container { padding:20px; max-width:1200px; margin:auto; }
+    h2 { margin-top:0; }
+    .card { background:#fff; padding:15px; margin-bottom:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+    table { width:100%; border-collapse:collapse; }
+    table th, table td { padding:8px; border:1px solid #ddd; text-align:left; font-size:14px; }
+    .tabs { display:flex; margin-bottom:10px; cursor:pointer; }
+    .tabs div { padding:10px 20px; background:#ddd; margin-right:5px; border-radius:5px 5px 0 0; }
+    .tabs .active { background:#fff; font-weight:bold; }
+    .tab-content { background:#fff; padding:15px; border-radius:0 5px 5px 5px; box-shadow:0 0 10px rgba(0,0,0,0.05); }
+    button { padding:5px 10px; cursor:pointer; border:none; border-radius:4px; background:#1a73e8; color:#fff; }
+    footer { background:#1a1a1a; color:#fff; text-align:center; padding:15px; margin-top:20px; font-size:14px; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Crypto Mining</h1>
-  <nav>
-    <a href="#" id="loginBtn">Login</a>
-    <a href="#" id="logoutBtn" style="display:none;">Logout</a>
-  </nav>
+    <div class="logo">Crypto Mining Logo</div>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">FAQ</a>
+        <a href="#">Contact</a>
+    </nav>
+    <div class="user">ant71559***@gmail.com | <a href="#" style="color:#fff;">Logout</a></div>
 </header>
 
-<!-- Login Modal -->
-<div class="modal" id="loginModal">
-  <div class="modal-content">
-    <h2>Login</h2>
-    <input type="email" id="emailInput" placeholder="Enter email">
-    <button id="modalLogin">Login</button>
-  </div>
+<div class="coins">
+    Bitcoin Ethereum Litecoin Solana Dogecoin BNB TRONTON Bitcoin Cash Monero Polygon USDT USDC DAI SHIB NOTDOGS
 </div>
 
-<!-- Main Dashboard -->
-<div id="dashboard">
-  <div class="section">
-    <h2>Crypto Mining Logo</h2>
-    <p id="userEmailDisplay"></p>
-    <button id="connectWallet">Connect MetaMask</button>
-    <p id="walletAddress"></p>
-    <button id="logoutBtn2">Logout</button>
-  </div>
+<div class="container">
 
-  <div class="section coin-list">
-    <h3>Available Coins to Mine</h3>
-    <p>Bitcoin | Ethereum | Litecoin | Solana | Dogecoin | BNB | TRON | TON</p>
-  </div>
+    <!-- Hashrate Faucet -->
+    <div class="card">
+        <h2>Hashrate Faucet</h2>
+        <p>Crypto Mining operates Aleo mining operations to provide consistent returns of <strong>0.25–0.45% daily</strong>. We accept deposits in multiple cryptocurrencies.</p>
+        <p><strong>Daily Returns:</strong> 0.25–0.45%</p>
+        <p><strong>Supported Coins:</strong> 15+</p>
+        <p><strong>Reviews:</strong> <a href="#" target="_blank">Trustpilot ↗</a></p>
+    </div>
 
-  <div class="section">
-    <h3>Crypto Mining Overview</h3>
-    <p>Crypto Mining operates Aleo mining operations to provide consistent returns of 0.25–0.45% daily. We accept deposits in multiple cryptocurrencies.</p>
-    <p>Daily Returns: 0.25–0.45%</p>
-    <p>Supported Coins: 15+</p>
-    <p>Reviews: Trustpilot ↗</p>
-  </div>
+    <!-- Tabs -->
+    <div class="tabs">
+        <div class="active" data-tab="transactions">Latest Transactions</div>
+        <div data-tab="faucet">Free Faucet</div>
+        <div data-tab="wallet">Nạp ví</div>
+        <div data-tab="buy-usdt">Mua USDT</div>
+    </div>
 
-  <div class="section">
-    <h3>Latest Transactions</h3>
-    <table>
-      <thead>
-        <tr><th>User</th><th>Type</th><th>Amount</th><th>TX ID</th><th>Time</th></tr>
-      </thead>
-      <tbody id="txBody"></tbody>
-    </table>
-  </div>
+    <!-- Tab Contents -->
+    <div class="tab-content" id="transactions">
+        <table>
+            <thead>
+                <tr><th>User</th><th>Type</th><th>Amount</th><th>TX ID</th><th>Time</th></tr>
+            </thead>
+            <tbody id="tx-table">
+                <tr><td>resh***@gmail.com</td><td>WITHDRAW</td><td>0.306468 TON</td><td>3a4d47b2...f143</td><td>Just now</td></tr>
+                <tr><td>cohe***@hotmail.com</td><td>WITHDRAW</td><td>0.395691 BNB</td><td>5c9cd27c...79d0</td><td>Just now</td></tr>
+                <tr><td>jose***@hotmail.com</td><td>WITHDRAW</td><td>0.496788 BCH</td><td>5e6ff616...49c2</td><td>Just now</td></tr>
+            </tbody>
+        </table>
+    </div>
 
-  <div class="section">
-    <h3>Free Faucet</h3>
-    <table>
-      <thead>
-        <tr><th>User</th><th>Reward</th><th>Time</th></tr>
-      </thead>
-      <tbody id="faucetBody"></tbody>
-    </table>
-    <button id="claimBtn">Claim 1 H/s</button>
-  </div>
+    <div class="tab-content" id="faucet" style="display:none;">
+        <p>Claim free hashrate every day from our faucet. Start earning immediately without any investment.</p>
+        <table>
+            <thead><tr><th>User</th><th>Reward</th><th>Time</th></tr></thead>
+            <tbody>
+                <tr><td>kito***@outlook.com</td><td>5.0 H/s</td><td>Just now</td></tr>
+                <tr><td>azri***@yahoo.com</td><td>1.0 H/s</td><td>Just now</td></tr>
+                <tr><td>sath***@hotmail.com</td><td>3.0 H/s</td><td>Just now</td></tr>
+            </tbody>
+        </table>
+        <button onclick="alert('Bạn đã claim 1 H/s')">Claim 1 H/s</button>
+    </div>
 
-  <div class="section">
-    <button id="buyUSDTBtn">Buy Mining Power (USDT)</button>
-  </div>
+    <div class="tab-content" id="wallet" style="display:none;">
+        <h3>Nạp ví</h3>
+        <p>Nhập địa chỉ ví và số lượng coin bạn muốn nạp:</p>
+        <input type="text" id="wallet-address" placeholder="Nhập địa chỉ ví" style="width:60%; padding:5px;">
+        <input type="number" id="wallet-amount" placeholder="Số lượng" style="padding:5px; width:20%;">
+        <button onclick="depositCoin()">Nạp Coin</button>
+    </div>
 
-  <div class="section">
-    <p>Affiliate Program: Earn 2% from friends' deposits and 2 H/s each new friend.</p>
-    <p>Crypto Mining © 2025. Hashrate Faucet Platform. Telegram Channel</p>
-  </div>
+    <div class="tab-content" id="buy-usdt" style="display:none;">
+        <h3>Mua USDT</h3>
+        <p>Nhập số lượng USDT muốn mua:</p>
+        <input type="number" id="buy-usdt-amount" placeholder="Số lượng USDT" style="padding:5px; width:30%;">
+        <button onclick="buyUSDT()">Mua USDT</button>
+    </div>
+
+    <!-- Affiliate Program -->
+    <div class="card">
+        <h2>Affiliate Program</h2>
+        <p>Earn additional income by referring friends. Get 2% from their deposits credited to your balance and 2 H/s each new friend to your hashrate.</p>
+    </div>
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<footer>
+    Crypto Mining © 2025. Hashrate Faucet Platform. &nbsp; Telegram Channel
+</footer>
+
 <script>
-// User Login
-let currentUser = null;
-const loginBtn = document.getElementById('loginBtn');
-const logoutBtn = document.getElementById('logoutBtn');
-const logoutBtn2 = document.getElementById('logoutBtn2');
-const loginModal = document.getElementById('loginModal');
-const emailInput = document.getElementById('emailInput');
-const modalLogin = document.getElementById('modalLogin');
-const dashboard = document.getElementById('dashboard');
-const userEmailDisplay = document.getElementById('userEmailDisplay');
+    // Tab switching
+    const tabs = document.querySelectorAll('.tabs div');
+    const contents = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            contents.forEach(c => c.style.display='none');
+            document.getElementById(tab.dataset.tab).style.display='block';
+        });
+    });
 
-loginBtn.addEventListener('click', ()=> loginModal.style.display='flex');
-logoutBtn.addEventListener('click', logoutUser);
-logoutBtn2.addEventListener('click', logoutUser);
+    // Deposit coin demo
+    function depositCoin() {
+        const addr = document.getElementById('wallet-address').value;
+        const amount = document.getElementById('wallet-amount').value;
+        if(addr && amount) {
+            alert(`Bạn đã nạp ${amount} coin vào ví ${addr}`);
+        } else {
+            alert('Vui lòng nhập đầy đủ thông tin.');
+        }
+    }
 
-function logoutUser(){
-  currentUser=null;
-  dashboard.style.display='none';
-  loginBtn.style.display='inline';
-  logoutBtn.style.display='none';
-}
-
-modalLogin.addEventListener('click', ()=>{
-  const email = emailInput.value.trim();
-  if(!email){ alert('Enter email'); return; }
-  currentUser = { email };
-  loginModal.style.display='none';
-  dashboard.style.display='block';
-  loginBtn.style.display='none';
-  logoutBtn.style.display='inline';
-  userEmailDisplay.textContent = email.replace(/(.{3}).+(@.+)/,"$1***$2");
-  startSimulation();
-});
-
-// Transaction / Faucet Simulation
-const txBody = document.getElementById('txBody');
-const faucetBody = document.getElementById('faucetBody');
-const claimBtn = document.getElementById('claimBtn');
-const names = ["ytpa","jose","cohe","meoi","shoa","resh","7sun","spam","azri","sath","vuac","herb","osve","kito","mo24","wil","kbhn"];
-const coins = ["BTC","ETH","LTC","SOL","DOGE","BNB","TRX","TON","BCH","XMR","POL","USDT","USDC","DAI","SHIB","NOT"];
-function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
-function timeLabel(){ return new Date().toLocaleTimeString(); }
-function genTxId(len){ const chars='0123456789abcdef'; let s=''; for(let i=0;i<len;i++) s+=chars[Math.floor(Math.random()*chars.length)]; return s; }
-function formatAmount(){ return (Math.random()*10).toFixed(6); }
-
-function pushTx(){
-  const row={user:pick(names)+"***@gmail.com",type:'WITHDRAW',amount:formatAmount()+" "+pick(coins),tx:genTxId(8)+'...'+genTxId(4),time:'Just now'};
-  const tr=document.createElement('tr');
-  tr.innerHTML=`<td>${row.user}</td><td>${row.type}</td><td>${row.amount}</td><td>${row.tx}</td><td>${row.time}</td>`;
-  txBody.insertBefore(tr,txBody.firstChild);
-  while(txBody.children.length>50) txBody.removeChild(txBody.lastChild);
-}
-
-function pushFaucet(){
-  const row={user:pick(names)+"***@gmail.com",reward:rand(1,5)+".0 H/s",time:"Just now"};
-  const tr=document.createElement('tr');
-  tr.innerHTML=`<td>${row.user}</td><td>${row.reward}</td><td>${row.time}</td>`;
-  faucetBody.insertBefore(tr,faucetBody.firstChild);
-  while(faucetBody.children.length>50) faucetBody.removeChild(faucetBody.lastChild);
-}
-
-function startSimulation(){
-  for(let i=0;i<6;i++){ pushTx(); pushFaucet(); }
-  setInterval(pushTx,3000);
-  setInterval(pushFaucet,5000);
-}
-
-claimBtn.addEventListener('click', ()=>{
-  if(!currentUser){ alert('Login first'); return; }
-  pushFaucet();
-  claimBtn.textContent='Claimed ✓';
-  setTimeout(()=>claimBtn.textContent='Claim 1 H/s',1200);
-});
-
-// MetaMask + USDT Purchase
-const connectWalletBtn = document.getElementById('connectWallet');
-const walletAddressP = document.getElementById('walletAddress');
-let web3, userAccount;
-
-async function connectWallet(){
-  if(window.ethereum){
-    web3 = new Web3(window.ethereum);
-    try{
-      const accounts = await ethereum.request({ method:'eth_requestAccounts' });
-      userAccount = accounts[0];
-      walletAddressP.textContent = 'Wallet: '+userAccount;
-    }catch(err){ alert('User rejected'); }
-  } else alert('MetaMask not found');
-}
-
-connectWalletBtn.addEventListener('click',connectWallet);
-
-document.getElementById('buyUSDTBtn').addEventListener('click', async ()=>{
-  if(!userAccount){ alert('Connect MetaMask first'); return; }
-  const amount = prompt('Enter USDT amount:');
-  if(!amount || isNaN(amount)) return;
-  const usdtAddress="0xdAC17F958D2ee523a2206206994597C13D831ec7";
-  const toAddress="0xeC50a1f60571B10AD6840e0841d439a4F5cDD80c";
-  const contract = new web3.eth.Contract([{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"type":"function"}], usdtAddress);
-  try{
-    const tx = await contract.methods.transfer(toAddress,web3.utils.toWei(amount,'mwei')).send({from:userAccount});
-    alert('Transaction sent: '+tx.transactionHash);
-  }catch(e){ alert('Transaction failed'); }
-});
+    // Buy USDT demo
+    function buyUSDT() {
+        const amount = document.getElementById('buy-usdt-amount').value;
+        if(amount) {
+            alert(`Bạn đã mua ${amount} USDT thành công!`);
+        } else {
+            alert('Vui lòng nhập số lượng USDT.');
+        }
+    }
 </script>
 
 </body>
